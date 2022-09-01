@@ -9,6 +9,7 @@ func pingHandler(clam *clamd.Clamd) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		err := clam.Ping()
 		if err != nil {
+			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not ping clamd")
 		}
 		return c.String(200, "OK")
@@ -20,15 +21,18 @@ func scanHandler(clam *clamd.Clamd) echo.HandlerFunc {
 		name := c.FormValue("name")
 		file, err := c.FormFile("file")
 		if err != nil {
+			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not get file")
 		}
 		src, err := file.Open()
 		if err != nil {
+			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not open file")
 		}
 		defer src.Close()
 		response, err := clam.ScanStream(src, make(chan bool))
 		if err != nil {
+			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not scan file")
 		}
 		result := <-response
@@ -47,15 +51,18 @@ func scanResponseHandler(clam *clamd.Clamd) echo.HandlerFunc {
 		name := c.FormValue("name")
 		file, err := c.FormFile("file")
 		if err != nil {
+			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not get file")
 		}
 		src, err := file.Open()
 		if err != nil {
+			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not open file")
 		}
 		defer src.Close()
 		response, err := clam.ScanStream(src, make(chan bool))
 		if err != nil {
+			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not scan file")
 		}
 		result := <-response

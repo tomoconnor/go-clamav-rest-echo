@@ -17,5 +17,9 @@ Docker:
 
 If clamav is in a separate container: 
 
-`docker run -e CLAMD_HOST=clamav --link=clamav -p 8080:8080 tomoconnor/go-clamav-rest-echo:latest`
+`docker run -e CLAMD_HOST=clamav --link=clamav -p 8080:8080 devopstom/go-clamav-rest-echo:latest`
 
+
+Docker Hub:
+-----------
+https://hub.docker.com/r/devopstom/go-clamav-rest-echo

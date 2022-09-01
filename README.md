@@ -19,6 +19,11 @@ If clamav is in a separate container:
 
 `docker run -e CLAMD_HOST=clamav --link=clamav -p 8080:8080 devopstom/go-clamav-rest-echo:latest`
 
+To run clamAV's scanner container, I'm using: 
+https://github.com/cabinetoffice/docker-clamav
+
+`docker run --name clamav -v ${PWD}/clamdata:/var/lib/clamav -d -p 3310:3310 quay.io/ukhomeofficedigital/clamav:latest`
+
 
 Docker Hub:
 -----------

@@ -12,3 +12,10 @@ Set Environment Variables:
 - CLAMD_PORT = 3310
 - LISTEN_PORT = 8080
 
+Docker:
+----------
+
+If clamav is in a separate container: 
+
+`docker run -e CLAMD_HOST=clamav --link=clamav -p 8080:8080 tomoconnor/go-clamav-rest-echo:latest`
+

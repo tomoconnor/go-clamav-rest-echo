@@ -30,6 +30,7 @@ func scanHandler(clam *clamd.Clamd) echo.HandlerFunc {
 			return echo.NewHTTPError(500, "Could not open file")
 		}
 		defer src.Close()
+		filesScanned.Inc()
 		response, err := clam.ScanStream(src, make(chan bool))
 		if err != nil {
 			c.Logger().Error(err)
@@ -38,9 +39,11 @@ func scanHandler(clam *clamd.Clamd) echo.HandlerFunc {
 		result := <-response
 		if result.Status == "FOUND" {
 			c.Logger().Errorf("Malware detected in file %v", name)
+			filesPositive.Inc()
 			return echo.NewHTTPError(451, "Malware detected")
 		} else {
 			c.Logger().Infof("No malware detected in file %v", name)
+			filesNegative.Inc()
 			return c.JSON(200, "OK")
 		}
 	}
@@ -60,6 +63,7 @@ func scanResponseHandler(clam *clamd.Clamd) echo.HandlerFunc {
 			return echo.NewHTTPError(500, "Could not open file")
 		}
 		defer src.Close()
+		filesScanned.Inc()
 		response, err := clam.ScanStream(src, make(chan bool))
 		if err != nil {
 			c.Logger().Error(err)
@@ -68,9 +72,11 @@ func scanResponseHandler(clam *clamd.Clamd) echo.HandlerFunc {
 		result := <-response
 		if result.Status == "FOUND" {
 			c.Logger().Errorf("Malware detected in file %v -- %v", name, result.Raw)
+			filesPositive.Inc()
 			return echo.NewHTTPError(451, result)
 		} else {
 			c.Logger().Infof("No malware detected in file %v", name)
+			filesNegative.Inc()
 			return c.JSON(200, result)
 		}
 	}

@@ -12,7 +12,7 @@ func pingHandler(clam *clamd.Clamd) echo.HandlerFunc {
 			c.Logger().Error(err)
 			return echo.NewHTTPError(500, "Could not ping clamd")
 		}
-		return c.String(200, "OK")
+		return c.JSON(200, "OK")
 	}
 }
 
@@ -41,7 +41,7 @@ func scanHandler(clam *clamd.Clamd) echo.HandlerFunc {
 			return echo.NewHTTPError(451, "Malware detected")
 		} else {
 			c.Logger().Infof("No malware detected in file %v", name)
-			return c.String(200, "OK")
+			return c.JSON(200, "OK")
 		}
 	}
 }
